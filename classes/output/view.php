@@ -51,9 +51,16 @@ class view implements renderable, templatable {
      * @throws \moodle_exception
      */
     public function export_for_template(renderer_base $output) {
+        $hascompletion = false;
+        if (isset($this->youtubewpt->completionprogress) && $this->youtubewpt->completionprogress > 0) {
+            $hascompletion = true;
+        }
+
         return [
             'videoid' => $this->youtubewpt->videoid,
-            'cmid' => $this->cmid
+            'cmid' => $this->cmid,
+            'completionprogress' => $this->youtubewpt->completionprogress,
+            'hascompletionprogress' => $hascompletion
         ];
     }
 }

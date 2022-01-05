@@ -57,7 +57,6 @@ class mod_youtubewpt_mod_form extends moodleform_mod {
 
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
-        $mform->addHelpButton('name', 'youtubewptname', 'mod_youtubewpt');
 
         // Adding the standard "intro" and "introformat" fields.
         if ($CFG->branch >= 29) {
@@ -106,12 +105,10 @@ class mod_youtubewpt_mod_form extends moodleform_mod {
     public function add_completion_rules() {
         $mform = $this->_form;
 
-        $options = [
-            '25' => '25%',
-            '50' => '50%',
-            '75' => '75%',
-            '100' => '100%'
-        ];
+        $options = [];
+        for ($i = 10; $i <= 100; $i+= 10) {
+            $options[$i] = $i . '%';
+        }
 
         $mform->addElement('select', 'completionprogress', get_string('completionprogress', 'mod_youtubewpt'), $options);
 
