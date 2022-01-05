@@ -1,0 +1,74 @@
+<h2>Youtube With Progress Tracking</h2>
+
+<div class="progress" style="width: 800px;">
+    <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+</div>
+
+<div id="youtubewpt-player" style="width: 800px; height: 360px; border: 1px solid #000;"></div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+    var player;
+    var time_update_interval;
+
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('youtubewpt-player', {
+            width: 600,
+            height: 400,
+            videoId: '{{{}}}',
+            playerVars: {
+                showinfo: 0,
+                start: -1,
+                autoplay: 1,
+                controls: 0,
+                disablekb: 1,
+                modestbranding: 0,
+                rel: 0
+            },
+            events: {
+                onReady: initialize
+            }
+        });
+    }
+
+    function initialize(event) {
+        // Clear any old interval.
+        clearInterval(time_update_interval);
+
+        // Start interval to update elapsed time display and
+        // the elapsed part of the progress bar every second.
+        time_update_interval = setInterval(checkTimerProgress, 1000);
+
+        event.target.playVideo();
+
+        event.target.setVolume(100);
+    }
+
+    // This function is called by initialize()
+    function checkTimerProgress() {
+        // Update current time text display.
+        var currentTime = parseInt(player.getCurrentTime()) + 1;
+        var videoDuration = parseInt(player.getDuration());
+
+        var progress = parseInt((currentTime * 100) / videoDuration);
+
+        var progressElement = document.getElementById('progress-bar');
+        progressElement.style.width = progress + '%';
+        progressElement.innerHTML = progress + '%';
+
+        if (progress >= 100) {
+            clearInterval(time_update_interval);
+
+            markVideoAsCompleted();
+        }
+    }
+
+    function markVideoAsCompleted() {
+        var cmid = '{{{cmid}}}';
+
+        require(['core/ajax'], function(Ajax) {
+            console.log('asdasdasd: ' + videoid);
+        });
+    }
+</script>
