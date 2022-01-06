@@ -24,11 +24,11 @@ namespace mod_youtubewpt\util;
  * @author      Willian Mano <willianmanoaraujo@gmail.com>
  */
 class cuepoint {
-    public function addpoint($cmid, $cuepoint) {
+    public function addpoint($youtubewptid, $cuepoint) {
         global $DB, $USER;
 
         $data = new \stdClass();
-        $data->cmid = $cmid;
+        $data->youtubewptid = $youtubewptid;
         $data->userid = $USER->id;
         $data->cuepoint = $cuepoint;
         $data->timecreated = time();
@@ -38,14 +38,14 @@ class cuepoint {
         return $id;
     }
 
-    public function get_high_user_cuepoint($cmid, $userid) {
+    public function get_high_user_cuepoint($youtubewptid, $userid) {
         global $DB;
 
         $sql = 'SELECT * FROM {youtubewpt_cuelogs}
-                WHERE cmid = :cmid AND userid = :userid 
+                WHERE youtubewptid = :youtubewptid AND userid = :userid 
                 ORDER BY cuepoint DESC LIMIT 1';
 
-        $record = $DB->get_record_sql($sql, ['cmid' => $cmid, 'userid' => $userid]);
+        $record = $DB->get_record_sql($sql, ['youtubewptid' => $youtubewptid, 'userid' => $userid]);
 
         if (!$record) {
             return false;

@@ -55,7 +55,7 @@ class custom_completion extends activity_custom_completion {
 
             $cueutil = new cuepoint();
 
-            $userhighcuepoint = $cueutil->get_high_user_cuepoint($this->cm->id, $this->userid);
+            $userhighcuepoint = $cueutil->get_high_user_cuepoint($youtubewptid, $this->userid);
 
             if ($userhighcuepoint >= $requiredprogress) {
                 return COMPLETION_COMPLETE;

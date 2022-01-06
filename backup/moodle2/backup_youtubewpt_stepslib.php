@@ -41,24 +41,30 @@ class backup_youtubewpt_activity_structure_step extends backup_activity_structur
     protected function define_structure() {
         $userinfo = $this->get_setting_value('userinfo');
 
-        // Replace with the attributes and final elements that the element will handle.
-        $attributes = null;
-        $finalelements = null;
-        $root = new backup_nested_element('mod_youtubewpt', $attributes, $finalelements);
-
-        // Replace with the attributes and final elements that the element will handle.
-        $attributes = null;
-        $finalelements = null;
-        $elt = new backup_nested_element('elt', $attributes, $finalelements);
-
         // Build the tree with these elements with $root as the root of the backup tree.
+        $youtubewpt = new backup_nested_element('youtubewpt', ['id'], [
+            'course', 'name', 'intro', 'introformat','videoid',
+            'completionprogress','timecreated', 'timemodified']);
+
+        $cuelogs = new backup_nested_element('cuelogs');
+        $cuelog = new backup_nested_element('cuelog', ['id'], [
+           'youtubewptid', 'userid', 'cuepoint', 'timecreated']);
+
+        $youtubewpt->add_child($cuelogs);
+        $cuelogs->add_child($cuelog);
 
         // Define the source tables for the elements.
+        $youtubewpt->set_source_table('youtubewpt', ['id' => backup::VAR_ACTIVITYID]);
+
+        // User views are included only if we are including user info.
+        if ($userinfo) {
+            // Define sources.
+            $cuelog->set_source_table('youtubewpt_cuelogs', ['youtubewptid' => backup::VAR_ACTIVITYID]);
+        }
 
         // Define id annotations.
+        $cuelog->annotate_ids('user', 'userid');
 
-        // Define file annotations.
-
-        return $this->prepare_activity_structure($root);
+        return $this->prepare_activity_structure($youtubewpt);
     }
 }

@@ -55,6 +55,8 @@ class progress extends external_api {
      * @throws \moodle_exception
      */
     public static function track($cmid, $cuepoint) {
+        global $DB;
+
         // We always must pass webservice params through validate_parameters.
         self::validate_parameters(self::track_parameters(), ['cmid' => $cmid, 'cuepoint' => $cuepoint]);
 
@@ -70,7 +72,7 @@ class progress extends external_api {
 
         $cueutil = new cuepoint();
 
-        $cueutil->addpoint($cmid, $cuepoint);
+        $cueutil->addpoint($cm->instance, $cuepoint);
 
         $completion = new completion_info($course);
         $completion->update_state($cm, COMPLETION_COMPLETE);

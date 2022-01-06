@@ -25,14 +25,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 $functions = [
-    'mod_youtubewpt_completecompletion' => [
-        'classname' => 'mod_youtubewpt\external\completion',
-        'classpath' => 'mod/youtubewpt/classes/external/completion.php',
-        'methodname' => 'complete',
-        'description' => 'Mark activity as completed',
-        'type' => 'write',
-        'ajax' => true
-    ],
     'mod_youtubewpt_trackprogress' => [
         'classname' => 'mod_youtubewpt\external\progress',
         'classpath' => 'mod/youtubewpt/classes/external/progress.php',

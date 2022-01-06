@@ -42,7 +42,11 @@ class restore_youtubewpt_activity_structure_step extends restore_activity_struct
         $paths = array();
         $userinfo = $this->get_setting_value('userinfo');
 
-        $paths[] = new restore_path_element('elt', '');
+        $paths[] = new restore_path_element('youtubewpt', '/activity/youtubewpt');
+
+        if ($userinfo) {
+            $paths[] = new restore_path_element('youtubewpt_cuelog', '/activity/youtubewpt/cuelogs/cuelog');
+        }
 
         return $this->prepare_activity_structure($paths);
     }
@@ -52,14 +56,25 @@ class restore_youtubewpt_activity_structure_step extends restore_activity_struct
      *
      * @param array $data Parsed element data.
      */
-    protected function process_elt($data) {
-        return;
+    protected function process_youtubewpt($data) {
+        global $DB;
+
+        $data = (object)$data;
+        $data->course = $this->get_courseid();
+
+        $newitemid = $DB->insert_record('youtubewpt', $data);
+
+        $this->apply_activity_instance($newitemid);
     }
 
-    /**
-     * Defines post-execution actions.
-     */
-    protected function after_execute() {
-        return;
+    protected function process_youtubewpt_cuelog($data) {
+        global $DB;
+
+        $data = (object)$data;
+
+        $data->userid = $this->get_mappingid('user', $data->userid);
+        $data->youtubewptid = $this->get_new_parentid('youtubewpt');
+
+        $DB->insert_record('youtubewpt_cuelogs', $data);
     }
 }
