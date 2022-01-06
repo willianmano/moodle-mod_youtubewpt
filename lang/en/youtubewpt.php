@@ -37,7 +37,8 @@ $string['pluginadministration'] = 'Youtube With Progress Tracking Administration
 $string['pluginname'] = 'Youtube With Progress Tracking';
 $string['privacy:metadata'] = 'Youtube With Progress Tracking does not store any personal data';
 $string['view'] = 'View';
-$string['youtubewpt:view'] = 'View test';
+$string['youtubewpt:view'] = 'View youtube video';
 
 $string['videoid'] = 'Video ID';
 $string['completionprogress'] = 'Progress required';
+$string['completionprogress_ruledesc'] = 'Watch the video';

@@ -158,7 +158,7 @@ function mod_youtubewpt_get_completion_active_rule_descriptions($cm) {
         switch ($key) {
             case 'completionprogress':
                 if (!empty($val)) {
-                    $descriptions[] = get_string('completionprogress', 'mod_youtubewpt');
+                    $descriptions[] = get_string('completionprogress_ruledesc', 'mod_youtubewpt');
                 }
                 break;
             default:

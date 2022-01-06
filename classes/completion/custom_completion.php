@@ -81,7 +81,7 @@ class custom_completion extends activity_custom_completion {
      */
     public function get_custom_rule_descriptions(): array {
         return [
-            'completionprogress' => get_string('completionprogress', 'mod_youtubewpt')
+            'completionprogress' => get_string('completionprogress_ruledesc', 'mod_youtubewpt')
         ];
     }
 

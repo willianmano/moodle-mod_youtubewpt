@@ -58,6 +58,7 @@ class view implements renderable, templatable {
 
         return [
             'videoid' => $this->youtubewpt->videoid,
+            'name' => $this->youtubewpt->name,
             'cmid' => $this->cmid,
             'completionprogress' => $this->youtubewpt->completionprogress,
             'hascompletionprogress' => $hascompletion
