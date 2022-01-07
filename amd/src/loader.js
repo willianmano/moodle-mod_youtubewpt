@@ -20,6 +20,9 @@ let  nextcuepoint = 10;
 
 /** @var {integer} The course module id */
 let  cmid = 0;
+/** @var {boolean} Completion enabled */
+let  completionenabled = false;
+
 
 /**
  * Set-up.
@@ -29,11 +32,14 @@ let  cmid = 0;
  * @param {string} selector video selector id
  * @param {string} videoid video url
  * @param {integer} coursemoduleid course module id
+ * @param {boolean} hascompletionprogress if the progress is enabled
  */
-export const setUp = (lang, selector, videoid, coursemoduleid) => {
+export const setUp = (lang, selector, videoid, coursemoduleid, hascompletionprogress) => {
     language = lang;
     firstLoad = true;
     cmid = coursemoduleid;
+    completionenabled = hascompletionprogress;
+
     // Notify Video.js about the nodes already present on the page.
     notifyVideoJS(selector, videoid);
     // We need to call popover automatically if nodes are added to the page later.
@@ -107,7 +113,9 @@ const checkTimerProgress = (player) => {
         var progressElement = document.getElementById('progress-bar');
         progressElement.style.width = progress + '%';
 
-        checkCuePointToLog(progress);
+        if (completionenabled) {
+            checkCuePointToLog(progress);
+        }
 
         if (progress >= 100) {
             clearInterval(progressinterval);
