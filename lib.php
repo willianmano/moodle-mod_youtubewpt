@@ -148,6 +148,8 @@ function youtubewpt_get_coursemodule_info($coursemodule) {
  * @return array $descriptions the array of descriptions for the custom rules.
  */
 function mod_youtubewpt_get_completion_active_rule_descriptions($cm) {
+    global $DB;
+
     // Values will be present in cm_info, and we assume these are up to date.
     if (empty($cm->customdata['customcompletionrules']) || $cm->completion != COMPLETION_TRACKING_AUTOMATIC) {
         return [];
@@ -158,7 +160,11 @@ function mod_youtubewpt_get_completion_active_rule_descriptions($cm) {
         switch ($key) {
             case 'completionprogress':
                 if (!empty($val)) {
-                    $descriptions[] = get_string('completionprogress_ruledesc', 'mod_youtubewpt');
+                    if (!$youtubewpt = $DB->get_record('youtubewpt', ['id' => $cm->instance])) {
+                        throw new \moodle_exception('Unable to find youtubewpt with id ' . $cm->instance);
+                    }
+
+                    $descriptions[] = get_string('completionprogress_ruledesc', 'mod_youtubewpt', $youtubewpt->completionprogress);
                 }
                 break;
             default:

@@ -37,4 +37,4 @@ $string['youtubewpt:view'] = 'Ver vídeo do youtube com acompanhamento de progre
 
 $string['videoid'] = 'ID do vídeo';
 $string['completionprogress'] = 'Progresso necessário';
-$string['completionprogress_ruledesc'] = 'Assistir o vídeo';
+$string['completionprogress_ruledesc'] = 'Assistir {$a}% do vídeo';

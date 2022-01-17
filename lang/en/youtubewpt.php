@@ -41,4 +41,4 @@ $string['youtubewpt:view'] = 'View youtube video';
 
 $string['videoid'] = 'Video ID';
 $string['completionprogress'] = 'Progress required';
-$string['completionprogress_ruledesc'] = 'Watch the video';
+$string['completionprogress_ruledesc'] = 'Watch {$a} of the video';

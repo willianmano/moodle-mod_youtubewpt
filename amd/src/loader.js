@@ -51,7 +51,7 @@ export const setUp = (lang, selector, videoid, coursemoduleid, hascompletionprog
 /**
  * Notify video.js of new nodes.
  * @param {string} selector video selector id
- * @param {string} selector video url
+ * @param {string} videoid youtube video id
  */
 const notifyVideoJS = (selector, videoid) => {
     const config = {

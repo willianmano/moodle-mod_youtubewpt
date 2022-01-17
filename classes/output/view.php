@@ -18,6 +18,7 @@ namespace mod_youtubewpt\output;
 
 defined('MOODLE_INTERNAL') || die();
 
+use cm_info;
 use renderable;
 use templatable;
 use renderer_base;
@@ -32,12 +33,12 @@ class view implements renderable, templatable {
 
     protected $youtubewpt;
     protected $context;
-    protected $cmid;
+    protected $coursemodule;
 
-    public function __construct($youtubewpt, $context, $cmid) {
+    public function __construct($youtubewpt, $context, $coursemodule) {
         $this->youtubewpt = $youtubewpt;
         $this->context = $context;
-        $this->cmid = $cmid;
+        $this->coursemodule = $coursemodule;
     }
 
     /**
@@ -51,17 +52,26 @@ class view implements renderable, templatable {
      * @throws \moodle_exception
      */
     public function export_for_template(renderer_base $output) {
+        global $USER;
+
         $hascompletion = false;
         if (isset($this->youtubewpt->completionprogress) && $this->youtubewpt->completionprogress > 0) {
             $hascompletion = true;
         }
 
+        // Display any activity information (eg completion requirements / dates).
+        $cminfo = cm_info::create($this->coursemodule);
+        $completiondetails = \core_completion\cm_completion_details::get_instance($cminfo, $USER->id);
+        $activitydates = \core\activity_dates::get_dates_for_module($cminfo, $USER->id);
+        $activityinformation = $output->activity_information($cminfo, $completiondetails, $activitydates);
+
         return [
             'videoid' => $this->youtubewpt->videoid,
             'name' => $this->youtubewpt->name,
             'intro' => format_module_intro('youtubewpt', $this->youtubewpt, $this->context->instanceid),
-            'cmid' => $this->cmid,
+            'cmid' => $this->coursemodule->id,
             'hascompletionprogress' => $hascompletion,
+            'activityinformation' => $activityinformation
         ];
     }
 }

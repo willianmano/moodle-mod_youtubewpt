@@ -80,8 +80,16 @@ class custom_completion extends activity_custom_completion {
      * @return array
      */
     public function get_custom_rule_descriptions(): array {
+        global $DB;
+
+        $youtubewptid = $this->cm->instance;
+
+        if (!$youtubewpt = $DB->get_record('youtubewpt', ['id' => $youtubewptid])) {
+            throw new \moodle_exception('Unable to find youtubewpt with id ' . $youtubewptid);
+        }
+
         return [
-            'completionprogress' => get_string('completionprogress_ruledesc', 'mod_youtubewpt')
+            'completionprogress' => get_string('completionprogress_ruledesc', 'mod_youtubewpt', $youtubewpt->completionprogress)
         ];
     }
 

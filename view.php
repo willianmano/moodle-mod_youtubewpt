@@ -55,7 +55,7 @@ echo $OUTPUT->header();
 
 $renderer = $PAGE->get_renderer('mod_youtubewpt');
 
-$contentrenderable = new \mod_youtubewpt\output\view($youtubewpt, $modulecontext, $cm->id);
+$contentrenderable = new \mod_youtubewpt\output\view($youtubewpt, $modulecontext, $cm);
 
 echo $renderer->render($contentrenderable);
 
