@@ -19,9 +19,8 @@
 
     function onYouTubeIframeAPIReady() {
         player = new YT.Player('youtubewpt-player', {
-            width: 600,
-            height: 400,
-            videoId: '{{{videoid}}}',
+            width: 640,
+            height: 360,
             playerVars: {
                 showinfo: 0,
                 start: -1,
@@ -36,12 +35,17 @@
             }
         });
     }
+
     function initialize(event) {
+        var url = 'https://www.youtube-nocookie.com/embed/' + '{{{videoid}}}';
+
         // Clear any old interval.
         clearInterval(time_update_interval);
         // Start interval to update elapsed time display and
         // the elapsed part of the progress bar every second.
         time_update_interval = setInterval(checkTimerProgress, 1000);
+        event.target.loadVideoByUrl({mediaContentUrl: url});
+
         event.target.playVideo();
         event.target.setVolume(100);
     }
