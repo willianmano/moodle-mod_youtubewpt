@@ -61,12 +61,10 @@ class backup_youtubewpt_activity_task extends backup_activity_task {
 
         $base = preg_quote($CFG->wwwroot, '/');
 
-        // Link to the list of choices.
-        $search = "/(".$base."\//mod\/youtubewpt\/index.php\?id\=)([0-9]+)/";
+        $search = "/(".$base."\/mod\/youtubewpt\/index.php\?id\=)([0-9]+)/";
         $content = preg_replace($search, '$@YOUTUBEWPTINDEX*$2@$', $content);
 
-        // Link to choice view by moduleid.
-        $search = "/(".$base."\//mod\/youtubewpt\/view.php\?id\=)([0-9]+)/";
+        $search = "/(".$base."\/mod\/youtubewpt\/view.php\?id\=)([0-9]+)/";
         $content = preg_replace($search, '$@YOUTUBEWPTVIEWBYID*$2@$', $content);
 
         return $content;
