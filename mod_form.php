@@ -47,7 +47,7 @@ class mod_youtubewpt_mod_form extends moodleform_mod {
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
         // Adding the standard "name" field.
-        $mform->addElement('text', 'name', get_string('name'), array('size' => '64'));
+        $mform->addElement('text', 'name', get_string('name'), ['size' => '64']);
 
         if (!empty($CFG->formatstringstriptags)) {
             $mform->setType('name', PARAM_TEXT);
@@ -65,7 +65,7 @@ class mod_youtubewpt_mod_form extends moodleform_mod {
             $this->add_intro_editor();
         }
 
-        $mform->addElement('text', 'videoid', get_string('videoid', 'mod_youtubewpt'), array('size' => '64'));
+        $mform->addElement('text', 'videoid', get_string('videoid', 'mod_youtubewpt'), ['size' => '64']);
         $mform->setType('videoid', PARAM_TEXT);
         $mform->addRule('videoid', null, 'required', null, 'client');
 
@@ -106,7 +106,7 @@ class mod_youtubewpt_mod_form extends moodleform_mod {
         $mform = $this->_form;
 
         $options = [];
-        for ($i = 10; $i <= 100; $i+= 10) {
+        for ($i = 10; $i <= 100; $i += 10) {
             $options[$i] = $i . '%';
         }
 

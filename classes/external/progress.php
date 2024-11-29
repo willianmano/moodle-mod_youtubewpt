@@ -16,12 +16,11 @@
 
 namespace mod_youtubewpt\external;
 
-use external_api;
-use external_value;
-use external_single_structure;
-use external_function_parameters;
+use core_external\external_api;
+use core_external\external_value;
+use core_external\external_single_structure;
+use core_external\external_function_parameters;
 use mod_youtubewpt\util\cuepoint;
-use completion_info;
 
 /**
  * Completion external api class.
@@ -55,31 +54,25 @@ class progress extends external_api {
      * @throws \moodle_exception
      */
     public static function track($cmid, $cuepoint) {
-        global $DB;
-
         // We always must pass webservice params through validate_parameters.
         self::validate_parameters(self::track_parameters(), ['cmid' => $cmid, 'cuepoint' => $cuepoint]);
 
         list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'youtubewpt');
 
-        $context = \context_course::instance($course->id);
+        $context = \core\context\course::instance($course->id);
 
         if (!is_enrolled($context)) {
-            return [
-                'status' => 'notenrolled'
-            ];
+            return ['status' => 'notenrolled'];
         }
 
         $cueutil = new cuepoint();
 
         $cueutil->addpoint($cm->instance, $cuepoint);
 
-        $completion = new completion_info($course);
+        $completion = new \completion_info($course);
         $completion->update_state($cm, COMPLETION_COMPLETE);
 
-        return [
-            'status' => 'ok'
-        ];
+        return ['status' => 'ok'];
     }
 
     /**
@@ -89,9 +82,9 @@ class progress extends external_api {
      */
     public static function track_returns() {
         return new external_single_structure(
-            array(
-                'status' => new external_value(PARAM_TEXT, 'Operation status')
-            )
+            [
+                'status' => new external_value(PARAM_TEXT, 'Operation status'),
+            ]
         );
     }
 }

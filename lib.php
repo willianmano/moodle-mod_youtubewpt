@@ -95,12 +95,12 @@ function youtubewpt_update_instance($moduleinstance, $mform = null) {
 function youtubewpt_delete_instance($id) {
     global $DB;
 
-    $exists = $DB->get_record('youtubewpt', array('id' => $id));
+    $exists = $DB->get_record('youtubewpt', ['id' => $id]);
     if (!$exists) {
         return false;
     }
 
-    $DB->delete_records('youtubewpt', array('id' => $id));
+    $DB->delete_records('youtubewpt', ['id' => $id]);
 
     return true;
 }
