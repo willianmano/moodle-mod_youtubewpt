@@ -15,17 +15,18 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Event observer definitions for mod_youtubewpt.
  *
  * @package     mod_youtubewpt
- * @copyright   2022 Willian Mano <willianmanoaraujo@gmail.com>
+ * @copyright   2026 Willian Mano <willianmanoaraujo@gmail.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_youtubewpt';
-$plugin->release = '1.1.0';
-$plugin->version = 2026060300;
-$plugin->requires = 2023100900;
-$plugin->maturity = MATURITY_STABLE;
+$observers = [
+    [
+        'eventname' => '\core\event\course_module_completion_updated',
+        'callback'  => '\mod_youtubewpt\observer::course_module_completion_updated',
+    ],
+];

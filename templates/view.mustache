@@ -1,88 +1,39 @@
-<div id="youtubewpt-player" style="width: 800px; height: 360px; border: 1px solid #000;"></div>
+{{!
+    This file is part of Moodle - https://moodle.org/
 
-<div class="progress" style="height: 2px;width: 800px;">
-    <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_youtubewpt/view
+
+    YouTube WPT player mount point. The Preact app reads the JSON payload
+    and initialises the YouTube IFrame player with progress tracking.
+
+    Context variables required:
+    * intro       string   Module intro HTML (may be empty).
+    * payloadjson string   JSON-encoded bootstrap payload for the JS app.
+
+    Example context (json):
+    {
+        "intro": "",
+        "payloadjson": "{\"cmid\":1,\"videoid\":\"dQw4w9WgXcQ\",\"completionenabled\":true,\"completionprogress\":100,\"startprogress\":0}"
+    }
+}}
+{{#intro}}
+    <div class="mod_introbox">{{{intro}}}</div>
+{{/intro}}
+
+<div data-youtubewpt-root>
+    <script type="application/json" data-youtubewpt-init>{{{payloadjson}}}</script>
 </div>
-
-<script src="https://www.youtube.com/iframe_api"></script>
-
-<script>
-    var player;
-    var time_update_interval;
-    var cmid = '{{{cmid}}}';
-    var completionprogress = '{{{completionprogress}}}';
-    var nextcuepoint = 10;
-
-    function onYouTubeIframeAPIReady() {
-        player = new YT.Player('youtubewpt-player', {
-            width: 640,
-            height: 360,
-            playerVars: {
-                showinfo: 0,
-                start: -1,
-                autoplay: 1,
-                controls: 0,
-                disablekb: 1,
-                modestbranding: 0,
-                rel: 0
-            },
-            events: {
-                onReady: initialize
-            }
-        });
-    }
-
-    function initialize(event) {
-        var url = 'https://www.youtube-nocookie.com/embed/' + '{{{videoid}}}';
-
-        // Clear any old interval.
-        clearInterval(time_update_interval);
-        // Start interval to update elapsed time display and
-        // the elapsed part of the progress bar every second.
-        time_update_interval = setInterval(checkTimerProgress, 1000);
-        event.target.loadVideoByUrl({mediaContentUrl: url});
-
-        event.target.playVideo();
-        event.target.setVolume(100);
-    }
-
-    // This function is called by initialize()
-    function checkTimerProgress() {
-        // Update current time text display.
-        var currentTime = parseInt(player.getCurrentTime()) + 1;
-        var videoDuration = parseInt(player.getDuration());
-        var progress = parseInt((currentTime * 100) / videoDuration);
-        var progressElement = document.getElementById('progress-bar');
-
-        progressElement.style.width = progress + '%';
-
-        {{#hascompletionprogress}}
-            checkCuePointToLog(progress);
-        {{/hascompletionprogress}}
-
-        if (progress >= 100) {
-            clearInterval(time_update_interval);
-
-            window.location.reload();
-        }
-    }
-
-    {{#hascompletionprogress}}
-        function checkCuePointToLog(progress) {
-            if (progress >= nextcuepoint) {
-                var currentcuepoint = nextcuepoint;
-                require(['core/ajax'], function(Ajax) {
-                    Ajax.call([{
-                        methodname: 'mod_youtubewpt_trackprogress',
-                        args: {
-                            cmid: cmid,
-                            cuepoint: currentcuepoint
-                        }
-                    }]);
-                });
-                // Increase next cue point to be saved in log.
-                nextcuepoint += 10;
-            }
-        }
-    {{/hascompletionprogress}}
-</script>

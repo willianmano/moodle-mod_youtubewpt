@@ -51,6 +51,12 @@ $PAGE->set_title(format_string($youtubewpt->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
 
+$PAGE->requires->js(
+    new moodle_url('/mod/youtubewpt/js/vendor/bft-vendor-10.29.2-3.1.1.min.js'),
+    true
+);
+$PAGE->requires->js_call_amd('mod_youtubewpt/app', 'init');
+
 echo $OUTPUT->header();
 
 $renderer = $PAGE->get_renderer('mod_youtubewpt');

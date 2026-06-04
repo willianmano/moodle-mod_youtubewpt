@@ -30,10 +30,22 @@ use renderer_base;
  */
 class view implements renderable, templatable {
 
+    /** @var \stdClass The youtubewpt instance record. */
     protected $youtubewpt;
+
+    /** @var \context_module The module context. */
     protected $context;
+
+    /** @var \cm_info The course module. */
     protected $coursemodule;
 
+    /**
+     * Constructor.
+     *
+     * @param \stdClass $youtubewpt
+     * @param \context_module $context
+     * @param \cm_info $coursemodule
+     */
     public function __construct($youtubewpt, $context, $coursemodule) {
         $this->youtubewpt = $youtubewpt;
         $this->context = $context;
@@ -41,26 +53,39 @@ class view implements renderable, templatable {
     }
 
     /**
-     * Export the data
+     * Export the data for the Mustache template.
      *
      * @param renderer_base $output
-     *
-     * @return array|\stdClass
-     *
+     * @return array
      * @throws \dml_exception
-     * @throws \moodle_exception
      */
-    public function export_for_template(renderer_base $output) {
-        $hascompletion = false;
-        if (isset($this->youtubewpt->completionprogress) && $this->youtubewpt->completionprogress > 0) {
-            $hascompletion = true;
+    public function export_for_template(renderer_base $output): array {
+        global $USER;
+
+        $completionprogress = 0;
+        if (!empty($this->youtubewpt->completionprogress)) {
+            $completionprogress = (int) $this->youtubewpt->completionprogress;
         }
 
+        $startprogress = 0;
+        if ($completionprogress > 0) {
+            $cueutil = new \mod_youtubewpt\util\cuepoint();
+            $startprogress = (int) $cueutil->get_high_user_cuepoint($this->youtubewpt->id, $USER->id);
+        }
+
+        $payload = [
+            'cmid'               => (int) $this->coursemodule->id,
+            'videoid'            => (string) $this->youtubewpt->videoid,
+            'completionenabled'  => $completionprogress > 0,
+            'completionprogress' => $completionprogress,
+            'startprogress'      => $startprogress,
+        ];
+
+        $payloadjson = json_encode($payload, JSON_HEX_TAG | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
         return [
-            'videoid' => $this->youtubewpt->videoid,
-            'intro' => format_module_intro('youtubewpt', $this->youtubewpt, $this->context->instanceid),
-            'cmid' => $this->coursemodule->id,
-            'hascompletionprogress' => $hascompletion,
+            'intro'       => format_module_intro('youtubewpt', $this->youtubewpt, $this->context->instanceid),
+            'payloadjson' => $payloadjson !== false ? $payloadjson : '{}',
         ];
     }
 }
