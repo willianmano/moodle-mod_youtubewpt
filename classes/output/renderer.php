@@ -44,4 +44,8 @@ class renderer extends plugin_renderer_base {
 
         return $this->render_from_template('mod_youtubewpt/view', $data);
     }
+
+    public function activity_information() {
+        return null;
+    }
 }
